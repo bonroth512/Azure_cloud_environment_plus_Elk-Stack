@@ -4,7 +4,8 @@
 
 The files in this repository were used to configure the network depicted below.
 
-https://github.com/bonroth512/Cyber_Projects/blob/main/Diagrams/web_plus_elk.png
+
+![web_plus_elk](https://user-images.githubusercontent.com/77121974/123343033-2dd31a00-d50e-11eb-8002-f78d9a948041.png)
 
 These files have been tested and used to generate a live ELK deployment on Azure. They can be used to either recreate the entire deployment pictured above. Alternatively, select portions of the yml and config file may be used to install only certain pieces of it, such as Filebeat.
 
