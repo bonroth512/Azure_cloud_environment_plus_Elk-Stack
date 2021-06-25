@@ -1,0 +1,17 @@
+#hosts
+
+#After running ansible on the vm, the default file of hosts will be created under /etc/ansible.
+#The DVWA containers will be grouped separately from the Elk vm so name the two groups [webservers] and [elk].
+
+[webservers]
+#alpha.example.org
+#beta.example.org
+#192.168.1.100
+#192.168.1.110
+10.0.0.5 ansible_python_interpreter=/usr/bin/python3
+10.0.0.6 ansible_python_interpreter=/usr/bin/python3
+10.0.0.7 ansible_python_interpreter=/usr/bin/python3
+
+[elk]
+10.1.0.6 ansible_python_interpreter=/usr/bin/python3
+

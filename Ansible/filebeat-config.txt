@@ -1,0 +1,25 @@
+#filebeat-config.yml 
+
+#SSH to the jump-box and attach to the ansible container to configure the Filebeats. 
+#Will need to download the configuration file from ansible.com; use this command:
+#curl https://gist.githubusercontent.com/slape/5cc350109583af6cbe577bbcc0710c93/raw/eca603b72586fbe148c11f9c87bf96a63cb25760/Filebeat > /etc/ansible/filebeat-config.yml
+
+#After downloading scroll down till "output.elasticsearch"
+#Change hosts to match Elk vm's private IP and elasticsearch's port 
+
+output.elasticsearch:
+  # Boolean flag to enable or disable the output module.
+  #enabled: true
+
+  # Array of hosts to connect to.
+  # Scheme and port can be left out and will be set to the default (http and 9200)
+  # In case you specify and additional path, the scheme is required: http://localh>  # IPv6 addresses should always be defined as: https://[2001:db8::1]:9200
+  hosts: ["10.1.0.6:9200"]
+  username: "elastic"
+  password: "changeme"      #It's recommended to change this password.
+
+  #scroll down to set up Kibana with the Elk's IP and correct port
+
+  set.kibana:
+  host: "10.1.0.6:5601" 
+
