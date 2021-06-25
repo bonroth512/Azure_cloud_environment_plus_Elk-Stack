@@ -8,14 +8,14 @@ The files in this repository were used to configure the network depicted below.
 
 These files have been tested and used to generate a live ELK deployment on Azure. They can be used to either recreate the entire deployment pictured above. Alternatively, select portions of the yml and config file may be used to install only certain pieces of it, such as Filebeat.
 
-[Install Web Virtual Machines](https://github.com/bonroth512/Azure_cloud_environment_plus_Elk-Stack/blob/dd3db2528135bc681ec2a2fc6cb56229dfbf2310/Ansible/install_dvwa.txt)
-[Ansible Configuration file](https://github.com/bonroth512/Azure_cloud_environment_plus_Elk-Stack/blob/974d96d60337910844c51bccfca37117e18e9892/Ansible/ansible-config.txt)  
-[Ansible Hosts Configuration](https://github.com/bonroth512/Azure_cloud_environment_plus_Elk-Stack/blob/974d96d60337910844c51bccfca37117e18e9892/Ansible/hosts_elk&dvwa.txt)  
-[Install Elk Playbook](https://github.com/bonroth512/Azure_cloud_environment_plus_Elk-Stack/blob/974d96d60337910844c51bccfca37117e18e9892/Ansible/install_elk_playbook.txt)
-[Filebeat Configuration](https://github.com/bonroth512/Azure_cloud_environment_plus_Elk-Stack/blob/974d96d60337910844c51bccfca37117e18e9892/Ansible/filebeat-config.txt)
-[Filebeat Playbook](https://github.com/bonroth512/Azure_cloud_environment_plus_Elk-Stack/blob/974d96d60337910844c51bccfca37117e18e9892/Ansible/filebeat-playbook.txt)
-[Metricbeat Configuration](https://github.com/bonroth512/Azure_cloud_environment_plus_Elk-Stack/blob/974d96d60337910844c51bccfca37117e18e9892/Ansible/metricbeat-config.txt)
-[Metricbeat Playbook](https://github.com/bonroth512/Azure_cloud_environment_plus_Elk-Stack/blob/974d96d60337910844c51bccfca37117e18e9892/Ansible/metricbeat-playbook.txt)
+-[Install Web Virtual Machines](https://github.com/bonroth512/Azure_cloud_environment_plus_Elk-Stack/blob/dd3db2528135bc681ec2a2fc6cb56229dfbf2310/Ansible/install_dvwa.txt)
+-[Ansible Configuration file](https://github.com/bonroth512/Azure_cloud_environment_plus_Elk-Stack/blob/974d96d60337910844c51bccfca37117e18e9892/Ansible/ansible-config.txt)  
+-[Ansible Hosts Configuration](https://github.com/bonroth512/Azure_cloud_environment_plus_Elk-Stack/blob/974d96d60337910844c51bccfca37117e18e9892/Ansible/hosts_elk&dvwa.txt)  
+-[Install Elk Playbook](https://github.com/bonroth512/Azure_cloud_environment_plus_Elk-Stack/blob/974d96d60337910844c51bccfca37117e18e9892/Ansible/install_elk_playbook.txt)
+-[Filebeat Configuration](https://github.com/bonroth512/Azure_cloud_environment_plus_Elk-Stack/blob/974d96d60337910844c51bccfca37117e18e9892/Ansible/filebeat-config.txt)
+-[Filebeat Playbook](https://github.com/bonroth512/Azure_cloud_environment_plus_Elk-Stack/blob/974d96d60337910844c51bccfca37117e18e9892/Ansible/filebeat-playbook.txt)
+-[Metricbeat Configuration](https://github.com/bonroth512/Azure_cloud_environment_plus_Elk-Stack/blob/974d96d60337910844c51bccfca37117e18e9892/Ansible/metricbeat-config.txt)
+-[Metricbeat Playbook](https://github.com/bonroth512/Azure_cloud_environment_plus_Elk-Stack/blob/974d96d60337910844c51bccfca37117e18e9892/Ansible/metricbeat-playbook.txt)
 
 This document contains the following details:
 - Description of the Topology
@@ -31,14 +31,13 @@ This document contains the following details:
 The main purpose of this network is to expose a load-balanced and monitored instance of DVWA, the D*mn Vulnerable Web Application.
 
 Load balancing ensures that the application will be highly available, in addition to restricting access to the network.
-- _TODO: What aspect of security do load balancers protect? What is the advantage of a jump box?_
+The advantages to incorporating load balancers into the topology are: availability, focusing traffic, and network security.  
 
-Integrating an ELK server allows users to easily monitor the vulnerable VMs for changes to the data and system logs.
-- _TODO: What does Filebeat watch for?_
-- _TODO: What does Metricbeat record?_
+Integrating an ELK server allows users to easily monitor the vulnerable VMs for changes to the metric data and system logs.  This includes two beats as well: Filebeats and Metricbeats.
+-Filebeat helps generate logs across the selected endpoints and forwards it to Elasticsearch and/or Logstash.  Specifically, its built to monitor changes on the file system. 
+-Metricbeats collects metrics across the selected endpoints and sends the data to Elasticsearch and/or Logstash.  
 
 The configuration details of each machine may be found below.
-_Note: Use the [Markdown Table Generator](http://www.tablesgenerator.com/markdown_tables) to add/remove values from the table_.
 
 | Name     | Function | IP Address | Operating System |
 |----------|----------|------------|------------------|
@@ -50,9 +49,14 @@ _Note: Use the [Markdown Table Generator](http://www.tablesgenerator.com/markdow
 | Load Balancer|Gateway|104.42.255.28|Linux           |
 ### Access Policies
 
-(Need to include SSH key and generation in this section)
+The machines on the internal network are not exposed to the public Internet.  Using key pairs, for SSH, generated on the Ansible control node helps control users and hosts.
+-Configuring the authentication of users with SSH keys can prevent unwanted traffic to the network.
 
-The machines on the internal network are not exposed to the public Internet. 
+Through the Ansible control node generate the key using in the working directory of ~/.ssh:
+-ssh-keygen
+-cat id_rsa.pub
+
+Following the keys creation, reset the SSH public key for each VM that will be accessed through port 22.
 
 Only the declared Workstation can accept connections from the Internet. Access to this machine is only allowed from the following IP addresses:
 -The public IP address of the Workstation has been whitelisted to allow access through 5601 to utilize Kibana. 
@@ -68,7 +72,9 @@ A summary of the access policies in place can be found in the table below.
 | Jump Box | No                  | Public IP of Workstation for SSH|
 | Web_1    | No                  | 10.0.0.4 (IP of Jump-Box) for SSH|
 | Web_2    | No                  | 10.0.0.4 (IP of Jump-Box) for SSH|
-
+| Web_3    | No                  | 10.0.0.4 (IP of Jump-Box) for SSH|
+| Elk-vm   | No                  | Public IP of Workstation using TCP 5601|
+| Load Balancer| No              | Public IP of Workstation on HTTP 80|
 
 ### Elk Configuration
 
@@ -82,7 +88,7 @@ The playbook implements the following tasks:
 
 The following screenshot displays the result of running `docker ps` after successfully configuring the ELK instance.
 
-https://github.com/bonroth512/Cyber_Projects/blob/main/Diagrams/elk_docker_ps.PNG
+![image](https://user-images.githubusercontent.com/77121974/123377431-51678600-d549-11eb-9d66-7df3478bad6d.png)
 
 (need to include why this represents an successfully configured ELK instance) = sebp/elk:761
 
