@@ -9,10 +9,16 @@ The files in this repository were used to configure the network depicted below.
 These files have been tested and used to generate a live ELK deployment on Azure. They can be used to either recreate the entire deployment pictured above. Alternatively, select portions of the yml and config file may be used to install only certain pieces of it, such as Filebeat.
 
 [Install Web Virtual Machines](https://github.com/bonroth512/Azure_cloud_environment_plus_Elk-Stack/blob/dd3db2528135bc681ec2a2fc6cb56229dfbf2310/Ansible/install_dvwa.txt)
-
+[Ansible Configuration file](https://github.com/bonroth512/Azure_cloud_environment_plus_Elk-Stack/blob/974d96d60337910844c51bccfca37117e18e9892/Ansible/ansible-config.txt)
+[Ansible Hosts Configuration](https://github.com/bonroth512/Azure_cloud_environment_plus_Elk-Stack/blob/974d96d60337910844c51bccfca37117e18e9892/Ansible/hosts_elk&dvwa.txt)
+[Install Elk Playbook](https://github.com/bonroth512/Azure_cloud_environment_plus_Elk-Stack/blob/974d96d60337910844c51bccfca37117e18e9892/Ansible/install_elk_playbook.txt)
+[Filebeat Configuration](https://github.com/bonroth512/Azure_cloud_environment_plus_Elk-Stack/blob/974d96d60337910844c51bccfca37117e18e9892/Ansible/filebeat-config.txt)
+[Filebeat Playbook](https://github.com/bonroth512/Azure_cloud_environment_plus_Elk-Stack/blob/974d96d60337910844c51bccfca37117e18e9892/Ansible/filebeat-playbook.txt)
+[Metricbeat Configuration](https://github.com/bonroth512/Azure_cloud_environment_plus_Elk-Stack/blob/974d96d60337910844c51bccfca37117e18e9892/Ansible/metricbeat-config.txt)
+[Metricbeat Playbook](https://github.com/bonroth512/Azure_cloud_environment_plus_Elk-Stack/blob/974d96d60337910844c51bccfca37117e18e9892/Ansible/metricbeat-playbook.txt)
 
 This document contains the following details:
-- Description of the Topologu
+- Description of the Topology
 - Access Policies
 - ELK Configuration
   - Beats in Use
@@ -41,24 +47,28 @@ _Note: Use the [Markdown Table Generator](http://www.tablesgenerator.com/markdow
 | Web_2    |Web Server| 10.0.0.6   | Linux            |
 | Web_3    |Web Server| 10.0.0.7   | Linux            |
 | Elk-vm   |Elk Server| 10.1.0.6   | Linux            |
-
+| Load Balancer|Gateway|104.42.255.28|Linux           |
 ### Access Policies
+
+(Need to include SSH key and generation in this section)
 
 The machines on the internal network are not exposed to the public Internet. 
 
-Only the _____ machine can accept connections from the Internet. Access to this machine is only allowed from the following IP addresses:
-- _TODO: Add whitelisted IP addresses_
+Only the declared Workstation can accept connections from the Internet. Access to this machine is only allowed from the following IP addresses:
+-The public IP address of the Workstation has been whitelisted to allow access through 5601 to utilize Kibana. 
 
-Machines within the network can only be accessed by _____.
-- _TODO: Which machine did you allow to access your ELK VM? What was its IP address?_
+Machines within the network can access the ELK VM through two methods:
+-The workstation with a whitelisted IP address can access through TCP port 5601 utilizing the Kibana interface.
+-The Jump-Box can utilize SSH to access the ELK VM.
 
 A summary of the access policies in place can be found in the table below.
 
 | Name     | Publicly Accessible | Allowed IP Addresses |
 |----------|---------------------|----------------------|
-| Jump Box | Yes/No              | 10.0.0.1 10.0.0.2    |
-|          |                     |                      |
-|          |                     |                      |
+| Jump Box | No                  | Public IP of Workstation for SSH|
+| Web_1    | No                  | 10.0.0.4 (IP of Jump-Box) for SSH|
+| Web_2    | No                  | 10.0.0.4 (IP of Jump-Box) for SSH|
+
 
 ### Elk Configuration
 
