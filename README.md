@@ -9,12 +9,19 @@ The files in this repository were used to configure the network depicted below.
 These files have been tested and used to generate a live ELK deployment on Azure. They can be used to either recreate the entire deployment pictured above. Alternatively, select portions of the yml and config file may be used to install only certain pieces of it, such as Filebeat.
 
 -[Install Web Virtual Machines](https://github.com/bonroth512/Azure_cloud_environment_plus_Elk-Stack/blob/dd3db2528135bc681ec2a2fc6cb56229dfbf2310/Ansible/install_dvwa.txt)
+
 -[Ansible Configuration file](https://github.com/bonroth512/Azure_cloud_environment_plus_Elk-Stack/blob/974d96d60337910844c51bccfca37117e18e9892/Ansible/ansible-config.txt)  
+
 -[Ansible Hosts Configuration](https://github.com/bonroth512/Azure_cloud_environment_plus_Elk-Stack/blob/974d96d60337910844c51bccfca37117e18e9892/Ansible/hosts_elk&dvwa.txt)  
+
 -[Install Elk Playbook](https://github.com/bonroth512/Azure_cloud_environment_plus_Elk-Stack/blob/974d96d60337910844c51bccfca37117e18e9892/Ansible/install_elk_playbook.txt)
+
 -[Filebeat Configuration](https://github.com/bonroth512/Azure_cloud_environment_plus_Elk-Stack/blob/974d96d60337910844c51bccfca37117e18e9892/Ansible/filebeat-config.txt)
+
 -[Filebeat Playbook](https://github.com/bonroth512/Azure_cloud_environment_plus_Elk-Stack/blob/974d96d60337910844c51bccfca37117e18e9892/Ansible/filebeat-playbook.txt)
+
 -[Metricbeat Configuration](https://github.com/bonroth512/Azure_cloud_environment_plus_Elk-Stack/blob/974d96d60337910844c51bccfca37117e18e9892/Ansible/metricbeat-config.txt)
+
 -[Metricbeat Playbook](https://github.com/bonroth512/Azure_cloud_environment_plus_Elk-Stack/blob/974d96d60337910844c51bccfca37117e18e9892/Ansible/metricbeat-playbook.txt)
 
 This document contains the following details:
@@ -53,6 +60,7 @@ The machines on the internal network are not exposed to the public Internet.  Us
 -Configuring the authentication of users with SSH keys can prevent unwanted traffic to the network.
 
 Through the Ansible control node generate the key using in the working directory of ~/.ssh:
+
 -ssh-keygen
 -cat id_rsa.pub
 
