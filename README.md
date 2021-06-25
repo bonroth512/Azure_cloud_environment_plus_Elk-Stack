@@ -61,7 +61,7 @@ The machines on the internal network are not exposed to the public Internet.  Us
 
 Through the Ansible control node generate the key using in the working directory of ~/.ssh:
 
--ssh-keygen
+-ssh-keygen 
 -cat id_rsa.pub
 
 Following the keys creation, reset the SSH public key for each VM that will be accessed through port 22.
