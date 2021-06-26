@@ -34,8 +34,8 @@ Load balancing ensures that the application will be highly available, in additio
 The advantages to incorporating load balancers into the topology are: availability, focusing traffic, and network security.  
 
 Integrating an ELK server allows users to easily monitor the vulnerable VMs for changes to the metric data and system logs.  This includes two beats as well: Filebeats and Metricbeats.
--Filebeat helps generate logs across the selected endpoints and forwards it to Elasticsearch and/or Logstash.  Specifically, its built to monitor changes on the file system. 
--Metricbeats collects metrics across the selected endpoints and sends the data to Elasticsearch and/or Logstash.  
+- Filebeat helps generate logs across the selected endpoints and forwards it to Elasticsearch and/or Logstash.  Specifically, its built to monitor changes on the file system. 
+- Metricbeats collects metrics across the selected endpoints and sends the data to Elasticsearch and/or Logstash.  
 
 The configuration details of each machine may be found below.
 
@@ -60,11 +60,11 @@ Through the Ansible control node generate the key using in the working directory
 Following the keys creation, reset the SSH public key for each VM that will be accessed through port 22.
 
 Only the declared Workstation can accept connections from the Internet. Access to this machine is only allowed from the following IP addresses:
--The public IP address of the Workstation has been whitelisted to allow access through 5601 to utilize Kibana. 
+- The public IP address of the Workstation has been whitelisted to allow access through 5601 to utilize Kibana. 
 
 Machines within the network can access the ELK VM through two methods:
--The workstation with a whitelisted IP address can access through TCP port 5601 utilizing the Kibana interface.
--The Jump-Box can utilize SSH to access the ELK VM.
+- The workstation with a whitelisted IP address can access through TCP port 5601 utilizing the Kibana interface.
+- The Jump-Box can utilize SSH to access the ELK VM.
 
 A summary of the access policies in place can be found in the table below.
 
@@ -95,13 +95,13 @@ The following screenshot displays the result of running `docker ps` after succes
 
 ### Target Machines & Beats
 This ELK server is configured to monitor the following machines:
--Web_1 with IP address of 10.0.0.5.
--Web_2 with IP address of 10.0.0.6.
--Web_3 with IP address of 10.0.0.7.
+- Web_1 with IP address of 10.0.0.5.
+- Web_2 with IP address of 10.0.0.6.
+- Web_3 with IP address of 10.0.0.7.
 
 We have installed the following Beats on these machines:
--Filebeats was installed on Web_1, Web_2, and Web_3.
--Metricbeats was installed on Web_1, Web_2, and Web_3.
+- Filebeats was installed on Web_1, Web_2, and Web_3.
+- Metricbeats was installed on Web_1, Web_2, and Web_3.
 
 These Beats allow us to collect the following information from each machine:
 - Filebeat will help generate log files being sent to Elasticsearch and Logstash from the webserver group of Web_1, Web_2, and Web_3.  Due to these web servers running DVWA containers, the logs to be organized are from the Apache server and MySQL server. As an example, Filebeats will collect Apache access logs like apache2.access.user_agent.original or maybe other possible exportable fields.
