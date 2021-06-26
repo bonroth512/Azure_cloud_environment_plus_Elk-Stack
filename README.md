@@ -82,7 +82,7 @@ A summary of the access policies in place can be found in the table below.
 Ansible was used to automate configuration of the ELK machine. No configuration was performed manually, which is advantageous because this ensures the provisioning of new instances will run identically.  The process of eliminating variability between each configuration is a way to remove errors between new deployments.    
 
 The playbook implements the following tasks:
--First task is to call upon the correct host group and remote user:
+- First task is to call upon the correct host group and remote user:
 ```
 - name: Configure Elk VM with Docker
   hosts: elk
@@ -90,12 +90,71 @@ The playbook implements the following tasks:
   become: true
   tasks:
 ```
-- Using Ansible apt module, install docker.io and python3-pip first
+- Using Ansible apt module, install docker.io and python3-pip first:
+```
+    # Use apt module
+    - name: Install docker.io
+      apt:
+        update_cache: yes
+        force_apt_get: yes
+        name: docker.io
+        state: present
 
-- then use the Ansible pip module to install the docker module. 
-- With the command module, increase the virtual memory of the elk-vm and then through the sysctl module automatically have this configuration run after an restart.
-- Initialize the docker elk container module and configure the correct port mapping.
-- Lastly, through systemd module, enable service docker on reboot.
+
+    # Use apt module
+    - name: Install python3-pip
+      apt:
+        force_apt_get: yes
+        name: python3-pip
+        state: present
+```
+- Use the Ansible pip module to install the docker module:
+```
+    #Use pip module (It will default to pip3)
+    - name: Install Docker Module
+      pip:
+        name: docker
+        state: present
+```
+- With the command module, increase the virtual memory of the elk-vm and then through the sysctl module automatically have this configuration run after an restart:
+```
+    #Use command module
+    - name: Increase virtual memory
+      command: sysctl -w vm.max_map_count=262144
+
+
+    #Use sysctl module
+    - name: Use more memory
+      sysctl:
+        name: vm.max_map_count
+        value: '262144'
+        state: present
+        reload: yes
+```        
+- Initialize the docker elk container module and configure the correct port mapping:
+```
+    #Use docker_container module
+    - name: download and launch a docker elk container
+      docker_container:
+        name: elk
+        image: sebp/elk:761
+        state: started
+        restart_policy: always
+        #Please list the ports that ELK runs on
+        published_ports:
+          - 5601:5601
+          - 9200:9200
+          - 5400:5400
+          - 80:80
+```
+- Lastly, through systemd module, enable service docker on reboot:
+```
+    #Use systemd module
+    - name: Enable service docker on boot
+      systemd:
+        name: docker
+        enabled: yes
+```
 
 The following screenshot displays the result of running `docker ps` after successfully configuring the ELK instance.
 
@@ -120,15 +179,49 @@ These Beats allow us to collect the following information from each machine:
 ### Using the Playbook
 In order to use the playbook, you will need to have an Ansible control node already configured. Assuming you have such a control node provisioned: 
 
-SSH into the control node and follow the steps below:
-- Copy the _____ file to _____.
-- Update the _____ file to include...
-- Run the playbook, and navigate to ____ to check that the installation worked as expected.
+SSH into the control node and follow the steps below to initial the ELK VM:
+- Copy the [Install Elk Playbook](https://github.com/bonroth512/Azure_cloud_environment_plus_Elk-Stack/blob/974d96d60337910844c51bccfca37117e18e9892/Ansible/install_elk_playbook.txt) to the Ansible control node's /etc/ansible directory.  Be sure to save the file with extension .yml.
+- Update the hosts file under /etc/ansible/hosts to include an elk group with the IP address of the ELK VM.
+```
+[elk]
+10.1.0.6 ansible_python_interpreter=/usr/bin/python3
+```
+- Run the playbook with: ```ansible-playbook install-elk.yml```
 
-_TODO: Answer the following questions to fill in the blanks:_
-- _Which file is the playbook? Where do you copy it?_
-- _Which file do you update to make Ansible run the playbook on a specific machine? How do I specify which machine to install the ELK server on versus which to install Filebeat on?_
-- _Which URL do you navigate to in order to check that the ELK server is running?
+While still in the current session with the control node, download and configure the two beats. First, Filebeats:
+- Download Filebeats:```curl https://gist.githubusercontent.com/slape/5cc350109583af6cbe577bbcc0710c93/raw/eca603b72586fbe148c11f9c87bf96a63cb25760/Filebeat > /etc/ansible/filebeat-config.yml```
+- Nano filebeat-config.yml by scrolling down to line 1106:
+```
+  # Array of hosts to connect to.
+  # Scheme and port can be left out and will be set to the default (http and 9200)
+  # In case you specify and additional path, the scheme is required: http://localh>  # IPv6 addresses should always be defined as: https://[2001:db8::1]:9200
+  hosts: ["10.1.0.6:9200"]
+  username: "elastic"
+  password: "changeme"      #It's recommended to change this password.
+```
+-Scroll further down to line 1806:
+```
+  set.kibana:
+  host: "10.1.0.6:5601" 
+```
+- Copy the [Filebeat Playbook](https://github.com/bonroth512/Azure_cloud_environment_plus_Elk-Stack/blob/974d96d60337910844c51bccfca37117e18e9892/Ansible/filebeat-playbook.txt) and be sure to nano the file to check the hosts and save the file with extension .yml.
+- Run this playbook with: ```ansible-playbook filebeat-playbook.yml"
+- To check if installation is working as expected: 
+  - Navigate to the Filebeat installation page on the ELK's GUI (http://[your.ELK-VM.External.IP]:5601/app/kibana).
+  - On the same page, scroll to 'Step 5: Module Status' and click 'Check Data'.
+  - Scroll to the bottom of the page adn click 'Verify Incoming Data'. 
 
-_As a **Bonus**, provide the specific commands the user will need to run to download the playbook, update the files, etc._
-
+Next Metricbeats:
+-Download Metricbeats:```#curl -L -O https://gist.githubusercontent.com/slape/58541585cc1886d2e26cd8be557ce04c/raw/0ce2c7e744c54513616966affb5e9d96f5e12f73/metricbeat > /etc/ansible/metricbeat-config.yml```
+-Nano metricbeat-config.yml by scrolling down and changing to elasticsearch's port like the filebeat-config.yml.
+```
+hosts: ["10.1.0.6:9200"]
+setup.kibana:
+  host: "10.1.0.6:5601"
+```
+- Copy [Metricbeat Playbook](https://github.com/bonroth512/Azure_cloud_environment_plus_Elk-Stack/blob/974d96d60337910844c51bccfca37117e18e9892/Ansible/metricbeat-playbook.txt) and be sure to check the hosts and save this file with extension .yml.
+- Run this playbook with: ```ansible-playbook metricbeat-playbook.yml``` 
+- To check if installation is working as expected: 
+  - Navigate to the Metricbeat installation page on the ELK's GUI (http://[your.ELK-VM.External.IP]:5601/app/kibana).
+  - On the same page, scroll to 'Step 5: Module Status' and click 'Check Data'.
+  - Scroll to the bottom of the page adn click 'Verify Incoming Data'. 
