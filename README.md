@@ -34,7 +34,7 @@ Load balancing ensures that the application will be highly available, in additio
 The advantages to incorporating load balancers into the topology are: availability, focusing traffic, and network security.  
 
 Integrating an ELK server allows users to easily monitor the vulnerable VMs for changes to the metric data and system logs.  This includes two beats as well: Filebeats and Metricbeats.
-- Filebeat helps generate logs across the selected endpoints and forwards it to Elasticsearch and/or Logstash.  Specifically, its built to monitor changes on the file system. 
+- Filebeats helps generate logs across the selected endpoints and forwards it to Elasticsearch and/or Logstash.  Specifically, its built to monitor changes on the file system. 
 - Metricbeats collects metrics across the selected endpoints and sends the data to Elasticsearch and/or Logstash.  
 
 The configuration details of each machine may be found below.
