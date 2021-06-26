@@ -82,7 +82,12 @@ A summary of the access policies in place can be found in the table below.
 Ansible was used to automate configuration of the ELK machine. No configuration was performed manually, which is advantageous because this ensures the provisioning of new instances will run identically.  The process of eliminating variability between each configuration is a way to remove errors between new deployments.    
 
 The playbook implements the following tasks:
-- Using Ansible apt module, install docker.io and python3-pip first, then use the Ansible pip module to install the docker module. 
+-First task is to call upon the correct host group and remote user:
+https://github.com/bonroth512/Azure_cloud_environment_plus_Elk-Stack/blob/61f768d2dbaa20486ee1940db1f14a113dc8f726/Ansible/install_elk_playbook.txt#L2-L6
+
+- Using Ansible apt module, install docker.io and python3-pip first
+
+- then use the Ansible pip module to install the docker module. 
 - With the command module, increase the virtual memory of the elk-vm and then through the sysctl module automatically have this configuration run after an restart.
 - Initialize the docker elk container module and configure the correct port mapping.
 - Lastly, through systemd module, enable service docker on reboot.
@@ -91,7 +96,7 @@ The following screenshot displays the result of running `docker ps` after succes
 
 ![image](https://user-images.githubusercontent.com/77121974/123377431-51678600-d549-11eb-9d66-7df3478bad6d.png)
 
-(need to include why this represents an successfully configured ELK instance) = sebp/elk:761
+Confirming the image description is sebp/elk:761 means the correct Docker container was downloaded.
 
 ### Target Machines & Beats
 This ELK server is configured to monitor the following machines:
