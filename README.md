@@ -50,7 +50,7 @@ The configuration details of each machine may be found below.
 ### Access Policies
 
 The machines on the internal network are not exposed to the public Internet.  Using key pairs, for SSH, generated on the Ansible control node helps control users and hosts.
--Configuring the authentication of users with SSH keys can prevent unwanted traffic to the network.
+- Configuring the authentication of users with SSH keys can prevent unwanted traffic to the network.
 
 Through the Ansible control node generate the key using in the working directory of ~/.ssh:
 
