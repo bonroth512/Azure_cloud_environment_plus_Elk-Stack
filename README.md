@@ -52,7 +52,7 @@ The configuration details of each machine may be found below.
 The machines on the internal network are not exposed to the public Internet.  Using key pairs, for SSH, generated on the Ansible control node helps control users and hosts.
 - Configuring the authentication of users with SSH keys can prevent unwanted traffic to the network.
 
-Through the Ansible control node generate the key using in the working directory of ~/.ssh:
+Through the Ansible control node, generate the key using in the working directory of ~/.ssh:
 
 - ssh-keygen 
 - cat id_rsa.pub
@@ -173,7 +173,7 @@ We have installed the following Beats on these machines:
 - Metricbeats was installed on Web_1, Web_2, and Web_3.
 
 These Beats allow us to collect the following information from each machine:
-- Filebeat will help generate log files being sent to Elasticsearch and Logstash from the webserver group of Web_1, Web_2, and Web_3.  Due to these web servers running DVWA containers, the logs to be organized are from the Apache server and MySQL server. As an example, Filebeats will collect Apache access logs like apache2.access.user_agent.original or maybe other possible exportable fields.
+- Filebeat will help generate log files from the webserver group of Web_1, Web_2, and Web_3 before being sent to Elasticsearch and/or Logstash.  Due to these web servers running DVWA containers, the logs to be organized are from the Apache server and MySQL server. As an example, Filebeats will collect Apache access logs like apache2.access.user_agent.original or maybe other possible exportable fields.
 - Metricbeat is shipper of system and service metrics from the webserver group of Web_1, Web_2, Web_3 to the Elk-vm.  As configured the metrics are directed to Elasticsearch to be viewed Kibana.  An example of the kind of metrics to be collected is server status data from the Apache mod_status module.       
 
 ### Using the Playbook
