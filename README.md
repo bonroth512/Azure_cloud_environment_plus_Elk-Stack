@@ -83,8 +83,13 @@ Ansible was used to automate configuration of the ELK machine. No configuration 
 
 The playbook implements the following tasks:
 -First task is to call upon the correct host group and remote user:
-https://github.com/bonroth512/Azure_cloud_environment_plus_Elk-Stack/blob/61f768d2dbaa20486ee1940db1f14a113dc8f726/Ansible/install_elk_playbook.txt#L2-L6
-
+'''
+- name: Configure Elk VM with Docker
+  hosts: elk
+  remote_user: azdmin
+  become: true
+  tasks:
+'''
 - Using Ansible apt module, install docker.io and python3-pip first
 
 - then use the Ansible pip module to install the docker module. 
